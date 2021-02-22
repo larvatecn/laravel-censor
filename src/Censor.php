@@ -190,7 +190,7 @@ class Censor
      */
     public function baiduCloudTextCensor(string $content)
     {
-        $response = \Larva\Baidu\Cloud\Bce::get('nlp')->textCensor($content);
+        $response = \Larva\Baidu\Cloud\BaiduCloud::get('nlp')->textCensor($content);
         $keyWords = [];
         if ($response['conclusionType'] != 1 && isset($response['data'])) {//不合规
             foreach ($response['data'] as $res) {
@@ -216,7 +216,7 @@ class Censor
         if ($isRemote) {
             $path = base64_encode(file_get_contents($path));
         }
-        $response = \Larva\Baidu\Cloud\Bce::get('nlp')->imageCensor($path);
+        $response = \Larva\Baidu\Cloud\BaiduCloud::get('nlp')->imageCensor($path);
         if ($response['conclusionType'] != 1 && isset($response['data'])) {//不合规
             $this->isMod = true;
         }
