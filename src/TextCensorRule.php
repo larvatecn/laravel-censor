@@ -22,9 +22,8 @@ class TextCensorRule implements \Illuminate\Contracts\Validation\Rule
      */
     public function passes($attribute, $value)
     {
-        $censor = Censor::make();
         try {
-            $censor->localStopWordsCheck($value);
+            Censor::make()->localStopWordsCheck($value);
             return true;
         } catch (CensorNotPassedException $e) {
             return false;

@@ -68,10 +68,10 @@ class Censor
         if (settings('system.local_censor', true)) {// 本地敏感词校验
             $content = $this->localStopWordsCheck($content);
         }
-        //云验证只检查一个平台
-        if (settings('system.tencent_censor', true) && class_exists('\Larva\TencentCloud\TencentCloud')) {
+        //云验证
+        if (settings('system.cloud_censor') == 'tencent') {
             $content = $this->tencentCloudTextCensor($content);
-        } else if (settings('system.baidu_censor', true) && class_exists('\Larva\Baidu\Cloud\BaiduCloud')) {
+        } else if (settings('system.cloud_censor') == 'baidu') {
             $content = $this->baiduCloudTextCensor($content);
         }
 
