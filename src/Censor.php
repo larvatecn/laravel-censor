@@ -59,7 +59,6 @@ class Censor
      *
      * @param $content
      * @return string
-     * @throws CensorNotPassedException
      */
     public function textCensor($content)
     {
@@ -72,7 +71,7 @@ class Censor
         //云验证只检查一个平台
         if (settings('system.tencent_censor', true) && class_exists('\Larva\TencentCloud\TencentCloud')) {
             $content = $this->tencentCloudTextCensor($content);
-        } else if (settings('system.baidu_censor', true) && class_exists('\Larva\Baidu\Cloud\Bce')) {
+        } else if (settings('system.baidu_censor', true) && class_exists('\Larva\Baidu\Cloud\BaiduCloud')) {
             $content = $this->baiduCloudTextCensor($content);
         }
 
@@ -89,6 +88,8 @@ class Censor
     {
         if (settings('system.tencent_censor', true) && class_exists('\Larva\TencentCloud\TencentCloud')) {
             $this->tencentCloudImageCensor($path, $isRemote);
+        } else if (settings('system.baidu_censor', true) && class_exists('\Larva\Baidu\Cloud\BaiduCloud')) {
+            $this->baiduCloudImageCensor($path, $isRemote);
         }
     }
 
@@ -137,25 +138,7 @@ class Censor
      */
     public function tencentCloudTextCensor(string $content)
     {
-        $result = \Larva\TencentCloud\TencentCloudHelper::textModeration($content);
-        $keyWords = Arr::get($result, 'Data.Keywords', []);
-
-        if (isset($result['Data']['DetailResult'])) {
-            /**
-             * filter 筛选腾讯云敏感词类型范围
-             * Normal：正常，Polity：涉政，Porn：色情，Illegal：违法，Abuse：谩骂，Terror：暴恐，Ad：广告，Custom：自定义关键词
-             */
-            $filter = ['Normal', 'Ad']; // Tag Setting 可以放入配置
-            $filtered = collect($result['Data']['DetailResult'])->filter(function ($item) use ($filter) {
-                if (in_array($item['EvilLabel'], $filter)) {
-                    $item = [];
-                }
-                return $item;
-            });
-            $detailResult = $filtered->pluck('Keywords');
-            $detailResult = Arr::collapse($detailResult);
-            $keyWords = array_merge($keyWords, $detailResult);
-        }
+        $keyWords = \Larva\TencentCloud\TencentCloudHelper::textModeration($content);
         if (!blank($keyWords)) {
             // 记录触发的审核词
             $this->wordMod = array_merge($this->wordMod, $keyWords);
@@ -171,14 +154,8 @@ class Censor
      */
     public function tencentCloudImageCensor($path, $isRemote = false)
     {
-        $params = [];
-        if ($isRemote) {
-            $params['FileUrl'] = $path;
-        } else {
-            $params['FileContent'] = base64_encode(file_get_contents($path));
-        }
-        $result = \Larva\TencentCloud\TencentCloudHelper::ImageModeration($params);
-        if (Arr::get($result, 'Data.EvilType') != 100) {
+        $result = \Larva\TencentCloud\TencentCloudHelper::ImageModeration($path, $isRemote);
+        if (!$result) {
             $this->isMod = true;
         }
     }
@@ -190,14 +167,7 @@ class Censor
      */
     public function baiduCloudTextCensor(string $content)
     {
-        $response = \Larva\Baidu\Cloud\BaiduCloud::get('nlp')->textCensor($content);
-        $keyWords = [];
-        if ($response['conclusionType'] != 1 && isset($response['data'])) {//不合规
-            foreach ($response['data'] as $res) {
-                $hits = array_shift($res['hits']);
-                $keyWords = array_merge($keyWords, $hits['words']);
-            }
-        }
+        $keyWords = \Larva\Baidu\Cloud\BaiduCloudHelper::keywordsExtraction($content);
         if (!blank($keyWords)) {
             // 记录触发的审核词
             $this->wordMod = array_merge($this->wordMod, $keyWords);
@@ -213,11 +183,8 @@ class Censor
      */
     public function baiduCloudImageCensor($path, $isRemote = false)
     {
-        if ($isRemote) {
-            $path = base64_encode(file_get_contents($path));
-        }
-        $response = \Larva\Baidu\Cloud\BaiduCloud::get('nlp')->imageCensor($path);
-        if ($response['conclusionType'] != 1 && isset($response['data'])) {//不合规
+        $status = \Larva\Baidu\Cloud\BaiduCloudHelper::keywordsExtraction($path, $isRemote);
+        if (!$status) {
             $this->isMod = true;
         }
     }
@@ -227,7 +194,7 @@ class Censor
      *
      * @param string $identity 身份证号码
      * @param string $realName 姓名
-     * @return array
+     * @return array|\TencentCloud\Faceid\V20180301\Models\IdCardVerificationResponse
      */
     public function realCensor($identity, $realName)
     {
