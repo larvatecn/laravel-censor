@@ -10,7 +10,7 @@ namespace Larva\Censor\Events;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\SerializesModels;
 
-class Approved
+class CensorRejected
 {
     use SerializesModels;
 

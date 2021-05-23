@@ -71,7 +71,7 @@ trait HasCensor
         $status = $this->forceFill([
             'status' => Status::APPROVED,
         ])->save();
-        event(new Events\Approved($this));
+        event(new Events\CensorApproved($this));
         return $status;
     }
 
@@ -84,7 +84,7 @@ trait HasCensor
         $status = $this->forceFill([
             'status' => Status::POSTPONED,
         ])->save();
-        event(new Events\Postponed($this));
+        event(new Events\CensorPostponed($this));
         return $status;
     }
 
@@ -97,7 +97,7 @@ trait HasCensor
         $status = $this->forceFill([
             'status' => Status::PENDING,
         ])->save();
-        event(new Events\Pending($this));
+        event(new Events\CensorPending($this));
         return $status;
     }
 
@@ -110,7 +110,7 @@ trait HasCensor
         $status = $this->forceFill([
             'status' => Status::REJECTED,
         ])->save();
-        event(new Events\Rejected($this));
+        event(new Events\CensorRejected($this));
         return $status;
     }
 }
