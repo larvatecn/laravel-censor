@@ -60,7 +60,7 @@ class Censor
      * @param $content
      * @return string
      */
-    public function textCensor($content)
+    public function textCensor($content): string
     {
         if (blank($content)) {
             return $content;
@@ -84,7 +84,7 @@ class Censor
      * @param string $path
      * @param false $isRemote
      */
-    public function imageCensor(string $path, $isRemote = false)
+    public function imageCensor(string $path, bool $isRemote = false)
     {
         if (settings('system.tencent_censor', true) && class_exists('\Larva\TencentCloud\TencentCloud')) {
             $this->tencentCloudImageCensor($path, $isRemote);
@@ -98,7 +98,7 @@ class Censor
      * @param string $content
      * @return string
      */
-    public function localStopWordsCheck(string $content)
+    public function localStopWordsCheck(string $content): string
     {
         // 处理指定类型非忽略的敏感词
         StopWord::query()->where('ugc', '<>', StopWord::IGNORE)
@@ -136,7 +136,7 @@ class Censor
      * @param string $content
      * @return string
      */
-    public function tencentCloudTextCensor(string $content)
+    public function tencentCloudTextCensor(string $content): string
     {
         $keyWords = \Larva\TencentCloud\TencentCloudHelper::textModeration($content);
         if (!blank($keyWords)) {
@@ -152,7 +152,7 @@ class Censor
      * @param string $path
      * @param false $isRemote
      */
-    public function tencentCloudImageCensor($path, $isRemote = false)
+    public function tencentCloudImageCensor(string $path, bool $isRemote = false)
     {
         $result = \Larva\TencentCloud\TencentCloudHelper::ImageModeration($path, $isRemote);
         if (!$result) {
@@ -165,7 +165,7 @@ class Censor
      * @param string $content
      * @return string
      */
-    public function baiduCloudTextCensor(string $content)
+    public function baiduCloudTextCensor(string $content): string
     {
         $keyWords = \Larva\Baidu\Cloud\BaiduCloudHelper::keywordsExtraction($content);
         if (!blank($keyWords)) {
@@ -181,7 +181,7 @@ class Censor
      * @param string $path
      * @param false $isRemote
      */
-    public function baiduCloudImageCensor($path, $isRemote = false)
+    public function baiduCloudImageCensor(string $path, bool $isRemote = false)
     {
         $status = \Larva\Baidu\Cloud\BaiduCloudHelper::keywordsExtraction($path, $isRemote);
         if (!$status) {
@@ -196,7 +196,7 @@ class Censor
      * @param string $realName 姓名
      * @return array|\TencentCloud\Faceid\V20180301\Models\IdCardVerificationResponse
      */
-    public function realCensor($identity, $realName)
+    public function realCensor(string $identity, string $realName)
     {
         return \Larva\TencentCloud\TencentCloud::faceid()->idCardVerification($identity, $realName);
     }

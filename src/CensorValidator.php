@@ -21,7 +21,7 @@ class CensorValidator
      * @param $validator
      * @return bool
      */
-    public function validate($attribute, $value, $parameters, $validator)
+    public function validate($attribute, $value, $parameters, $validator): bool
     {
         try {
             Censor::make()->localStopWordsCheck($value);

@@ -20,7 +20,7 @@ class TextCensorRule implements \Illuminate\Contracts\Validation\Rule
      * @param mixed $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         try {
             Censor::make()->localStopWordsCheck($value);
@@ -34,7 +34,7 @@ class TextCensorRule implements \Illuminate\Contracts\Validation\Rule
      * 校验错误提示信息
      * @return array|string
      */
-    public function message()
+    public function message(): array|string
     {
         return trans('censor.words_banned');
     }
