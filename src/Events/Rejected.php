@@ -7,21 +7,25 @@
 
 namespace Larva\Censor\Events;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\SerializesModels;
 
 class Rejected
 {
     use SerializesModels;
 
-    public $model;
+    /**
+     * @var Model
+     */
+    public $source;
 
     /**
      * Create a new event instance.
      *
-     * @param $model
+     * @param Model $source
      */
-    public function __construct($model)
+    public function __construct(Model $source)
     {
-        $this->model = $model;
+        $this->source = $source;
     }
 }
