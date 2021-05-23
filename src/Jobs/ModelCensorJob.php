@@ -11,7 +11,7 @@ namespace Larva\Censor\Jobs;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class ModelCensorJob
+ * 模型审核
  * @author Tongle Xu <xutongle@gmail.com>
  */
 class ModelCensorJob extends CensorJob
