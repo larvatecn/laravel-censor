@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 trait HasCensor
 {
+    protected $statusField = 'status';
+
     /**
      * 查询待审核的
      * @param Builder $query
@@ -29,7 +31,7 @@ trait HasCensor
      */
     public function scopePending(Builder $query): Builder
     {
-        return $query->whereIn('status', [Status::PENDING,Status::POSTPONED]);
+        return $query->whereIn($this->statusField, [Status::PENDING, Status::POSTPONED]);
     }
 
     /**
@@ -39,7 +41,7 @@ trait HasCensor
      */
     public function scopePostponed(Builder $query): Builder
     {
-        return $query->whereIn('status', [Status::PENDING,Status::POSTPONED]);
+        return $query->whereIn($this->statusField, [Status::PENDING, Status::POSTPONED]);
     }
 
     /**
@@ -49,7 +51,7 @@ trait HasCensor
      */
     public function scopeApprove(Builder $query): Builder
     {
-        return $query->where('status', Status::APPROVED);
+        return $query->where($this->statusField, Status::APPROVED);
     }
 
     /**
@@ -59,7 +61,7 @@ trait HasCensor
      */
     public function scopeRejected(Builder $query): Builder
     {
-        return $query->where('status', Status::REJECTED);
+        return $query->where($this->statusField, Status::REJECTED);
     }
 
     /**
@@ -69,7 +71,7 @@ trait HasCensor
     public function markApproved(): bool
     {
         $status = $this->forceFill([
-            'status' => Status::APPROVED,
+            $this->statusField => Status::APPROVED,
         ])->save();
         event(new Events\CensorApproved($this));
         return $status;
@@ -82,7 +84,7 @@ trait HasCensor
     public function markPostponed(): bool
     {
         $status = $this->forceFill([
-            'status' => Status::POSTPONED,
+            $this->statusField => Status::POSTPONED,
         ])->save();
         event(new Events\CensorPostponed($this));
         return $status;
@@ -95,7 +97,7 @@ trait HasCensor
     public function markPending(): bool
     {
         $status = $this->forceFill([
-            'status' => Status::PENDING,
+            $this->statusField => Status::PENDING,
         ])->save();
         event(new Events\CensorPending($this));
         return $status;
@@ -108,7 +110,7 @@ trait HasCensor
     public function markRejected(): bool
     {
         $status = $this->forceFill([
-            'status' => Status::REJECTED,
+            $this->statusField => Status::REJECTED,
         ])->save();
         event(new Events\CensorRejected($this));
         return $status;
