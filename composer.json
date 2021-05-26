@@ -13,6 +13,7 @@
     "illuminate/database": "^6.0 || ^7.0 || ^8.0",
     "illuminate/support": "^6.0 || ^7.0 || ^8.0",
     "illuminate/queue": "^6.0 || ^7.0 || ^8.0",
+    "illuminate/events": "^6.0 || ^7.0 || ^8.0",
     "larva/laravel-settings": "^1.0"
   },
   "require-dev": {

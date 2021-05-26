@@ -9,6 +9,7 @@ namespace Larva\Censor;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Event;
 
 /**
  * 内容审查
@@ -22,6 +23,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 trait HasCensor
 {
+    /**
+     * @var string
+     */
     protected $statusField = 'status';
 
     /**
@@ -73,7 +77,7 @@ trait HasCensor
         $status = $this->forceFill([
             $this->statusField => Status::APPROVED,
         ])->save();
-        event(new Events\CensorApproved($this));
+        Event::dispatch(new Events\CensorApproved($this));
         return $status;
     }
 
@@ -86,7 +90,7 @@ trait HasCensor
         $status = $this->forceFill([
             $this->statusField => Status::POSTPONED,
         ])->save();
-        event(new Events\CensorPostponed($this));
+        Event::dispatch(new Events\CensorPostponed($this));
         return $status;
     }
 
@@ -99,7 +103,7 @@ trait HasCensor
         $status = $this->forceFill([
             $this->statusField => Status::PENDING,
         ])->save();
-        event(new Events\CensorPending($this));
+        Event::dispatch(new Events\CensorPending($this));
         return $status;
     }
 
@@ -112,7 +116,7 @@ trait HasCensor
         $status = $this->forceFill([
             $this->statusField => Status::REJECTED,
         ])->save();
-        event(new Events\CensorRejected($this));
+        Event::dispatch(new Events\CensorRejected($this));
         return $status;
     }
 }
