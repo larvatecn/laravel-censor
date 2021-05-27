@@ -19,7 +19,8 @@
   },
   "require-dev": {
     "larva/laravel-tencent-cloud": "^1.0",
-    "larva/laravel-baidu-cloud": "^1.0"
+    "larva/laravel-baidu-cloud": "^1.0",
+    "dcat/laravel-admin": "2.*"
   },
   "autoload": {
     "psr-4": {
@@ -40,5 +41,6 @@
     "larva/laravel-tencent-cloud": "This is a tencent cloud expansion for the laravel.",
     "larva/laravel-baidu-cloud": "This is a baidu cloud expansion for the laravel."
   },
+  "minimum-stability": "dev",
   "prefer-stable": true
 }
