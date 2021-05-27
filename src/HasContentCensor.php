@@ -67,9 +67,9 @@ trait HasContentCensor
             $censor = Censor::make();
             try {
                 $this->attributes[$field] = $censor->textCensor($this->attributes[$field]);
-                if ($censor->isMod) {//如果标题命中了关键词就放入待审核
+                if ($censor->isMod) {//如果标题命中了关键词就放入人工审核
                     $stopWords = array_unique($censor->wordMod);
-                    $this->markPending();
+                    $this->markPostponed();
                 }
             } catch (CensorNotPassedException $e) {
                 $stopWords = array_unique($censor->wordBanned);
