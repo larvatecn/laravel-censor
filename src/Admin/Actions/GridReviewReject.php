@@ -5,21 +5,21 @@
  * @link http://www.larva.com.cn/
  */
 
-namespace Larva\Censor\Admin\Actions\Grid;
+namespace Larva\Censor\Admin\Actions;
 
 use Dcat\Admin\Grid\RowAction;
 use Illuminate\Http\Request;
 
 /**
- * 审核通过
+ * 拒绝通过
  * @author Tongle Xu <xutongle@gmail.com>
  */
-class ReviewAccept extends RowAction
+class GridReviewReject extends RowAction
 {
     /**
      * @var string
      */
-    protected $title = '<i class="feather icon-check"></i> '.'审核通过';
+    protected $title = '<i class="feather icon-slash"></i> '.'拒绝通过';
 
     /**
      * @var string|null
@@ -41,14 +41,14 @@ class ReviewAccept extends RowAction
         $key = $this->getKey();
         $model = $request->get('model');
 
-        $model::findOrFail($key)->markApproved();
+        $model::findOrFail($key)->markRejected();
 
-        return $this->response()->success('已审核通过')->refresh();
+        return $this->response()->success('已拒绝通过')->refresh();
     }
 
     public function confirm()
     {
-        return ['确定审核通过吗？'];
+        return ['确定拒绝通过吗？'];
     }
 
     public function parameters()

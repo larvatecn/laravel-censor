@@ -5,29 +5,23 @@
  * @link http://www.larva.com.cn/
  */
 
-namespace Larva\Censor\Admin\Actions\Grid;
+namespace Larva\Censor\Admin\Actions;
 
-use Dcat\Admin\Grid\RowAction;
+use Dcat\Admin\Grid\BatchAction;
 use Illuminate\Http\Request;
 
 /**
- * 拒绝通过
+ * Class BatchReject
  * @author Tongle Xu <xutongle@gmail.com>
  */
-class ReviewReject extends RowAction
+class GridBatchReject extends BatchAction
 {
-    /**
-     * @var string
-     */
     protected $title = '<i class="feather icon-slash"></i> '.'拒绝通过';
 
-    /**
-     * @var string|null
-     */
     protected $model;
 
     /**
-     * Restore constructor.
+     * BatchRestore constructor.
      * @param string|null $model
      */
     public function __construct(string $model = null)
@@ -38,17 +32,16 @@ class ReviewReject extends RowAction
 
     public function handle(Request $request)
     {
-        $key = $this->getKey();
         $model = $request->get('model');
-
-        $model::findOrFail($key)->markRejected();
-
-        return $this->response()->success('已拒绝通过')->refresh();
+        foreach ((array)$this->getKey() as $key) {
+            $model::query()->findOrFail($key)->markRejected();
+        }
+        return $this->response()->success('已拒绝')->refresh();
     }
 
     public function confirm()
     {
-        return ['确定拒绝通过吗？'];
+        return ['确定吗？'];
     }
 
     public function parameters()

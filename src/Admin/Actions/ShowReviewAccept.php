@@ -1,12 +1,12 @@
 <?php
 
-namespace Larva\Censor\Admin\Actions\Show;
+namespace Larva\Censor\Admin\Actions;
 
 use Dcat\Admin\Actions\Response;
 use Dcat\Admin\Show\AbstractTool;
 use Illuminate\Http\Request;
 
-class ReviewAccept extends AbstractTool
+class ShowReviewAccept extends AbstractTool
 {
     /**
      * @return string

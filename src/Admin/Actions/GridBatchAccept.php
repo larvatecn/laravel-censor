@@ -5,7 +5,7 @@
  * @link http://www.larva.com.cn/
  */
 
-namespace Larva\Censor\Admin\Actions\Grid;
+namespace Larva\Censor\Admin\Actions;
 
 use Dcat\Admin\Grid\BatchAction;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
  * 批量审核通过
  * @author Tongle Xu <xutongle@gmail.com>
  */
-class BatchAccept extends BatchAction
+class GridBatchAccept extends BatchAction
 {
     protected $title = '<i class="feather icon-check"></i> '.'审核通过';
 
