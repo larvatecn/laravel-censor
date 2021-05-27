@@ -7,25 +7,28 @@
 
 namespace Larva\Censor\Events;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * 内容审核通过
+ * @author Tongle Xu <xutongle@gmail.com>
+ */
 class CensorApproved
 {
     use SerializesModels;
 
     /**
-     * @var Model
+     * @var mixed
      */
-    public $source;
+    public $model;
 
     /**
      * Create a new event instance.
      *
-     * @param Model $source
+     * @param mixed $model
      */
-    public function __construct(Model $source)
+    public function __construct($model)
     {
-        $this->source = $source;
+        $this->model = $model;
     }
 }

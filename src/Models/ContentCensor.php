@@ -9,6 +9,7 @@
 namespace Larva\Censor\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * 内容安全表
@@ -39,9 +40,9 @@ class ContentCensor extends Model
 
     /**
      * 多态关联
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @return MorphTo
      */
-    public function source()
+    public function source(): MorphTo
     {
         return $this->morphTo();
     }

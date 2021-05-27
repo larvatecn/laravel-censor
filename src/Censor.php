@@ -9,7 +9,10 @@
 namespace Larva\Censor;
 
 use Illuminate\Support\Arr;
+use Larva\Baidu\Cloud\BaiduCloudHelper;
 use Larva\Censor\Models\StopWord;
+use Larva\TencentCloud\TencentCloud;
+use Larva\TencentCloud\TencentCloudHelper;
 
 /**
  * 内容审核
@@ -138,7 +141,7 @@ class Censor
      */
     public function tencentCloudTextCensor(string $content): string
     {
-        $keyWords = \Larva\TencentCloud\TencentCloudHelper::textModeration($content);
+        $keyWords = TencentCloudHelper::textModeration($content);
         if (!blank($keyWords)) {
             // 记录触发的审核词
             $this->wordMod = array_merge($this->wordMod, $keyWords);
@@ -154,7 +157,7 @@ class Censor
      */
     public function tencentCloudImageCensor(string $path, bool $isRemote = false)
     {
-        $result = \Larva\TencentCloud\TencentCloudHelper::ImageModeration($path, $isRemote);
+        $result = TencentCloudHelper::ImageModeration($path, $isRemote);
         if (!$result) {
             $this->isMod = true;
         }
@@ -167,7 +170,7 @@ class Censor
      */
     public function baiduCloudTextCensor(string $content): string
     {
-        $keyWords = \Larva\Baidu\Cloud\BaiduCloudHelper::keywordsExtraction($content);
+        $keyWords = BaiduCloudHelper::keywordsExtraction($content);
         if (!blank($keyWords)) {
             // 记录触发的审核词
             $this->wordMod = array_merge($this->wordMod, $keyWords);
@@ -183,7 +186,7 @@ class Censor
      */
     public function baiduCloudImageCensor(string $path, bool $isRemote = false)
     {
-        $status = \Larva\Baidu\Cloud\BaiduCloudHelper::keywordsExtraction($path, $isRemote);
+        $status = BaiduCloudHelper::keywordsExtraction($path, $isRemote);
         if (!$status) {
             $this->isMod = true;
         }
@@ -198,6 +201,6 @@ class Censor
      */
     public function realCensor(string $identity, string $realName)
     {
-        return \Larva\TencentCloud\TencentCloud::faceid()->idCardVerification($identity, $realName);
+        return TencentCloud::faceid()->idCardVerification($identity, $realName);
     }
 }

@@ -11,7 +11,7 @@ namespace Larva\Censor;
  * 审核状态
  * @author Tongle Xu <xutongle@gmail.com>
  */
-class Status
+class CensorStatus
 {
     const PENDING = 0;
     const APPROVED = 1;

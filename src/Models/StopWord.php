@@ -8,6 +8,7 @@
 
 namespace Larva\Censor\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -58,10 +59,10 @@ class StopWord extends Model
     /**
      * 为数组 / JSON 序列化准备日期。
      *
-     * @param \DateTimeInterface $date
+     * @param DateTimeInterface $date
      * @return string
      */
-    protected function serializeDate(\DateTimeInterface $date)
+    protected function serializeDate(DateTimeInterface $date): string
     {
         return $date->format($this->getDateFormat());
     }
@@ -70,7 +71,7 @@ class StopWord extends Model
      * UGC 处理方式
      * @return string[]
      */
-    public static function getUGCActions()
+    public static function getUGCActions(): array
     {
         return [
             static::IGNORE => '忽略不处理',
@@ -88,7 +89,7 @@ class StopWord extends Model
      * @param string $replacement 替换词或替换规则
      * @return static
      */
-    public static function build($ugc, $find, $replacement)
+    public static function build(string $ugc, string $find, string $replacement): StopWord
     {
         $stopWord = new static;
         $stopWord->ugc = $ugc;

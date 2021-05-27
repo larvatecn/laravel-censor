@@ -34,7 +34,7 @@ class TextCensorRule implements \Illuminate\Contracts\Validation\Rule
      * 校验错误提示信息
      * @return array|string
      */
-    public function message(): array|string
+    public function message()
     {
         return trans('censor.words_banned');
     }

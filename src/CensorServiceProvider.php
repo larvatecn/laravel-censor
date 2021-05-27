@@ -8,6 +8,7 @@
 
 namespace Larva\Censor;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -32,7 +33,7 @@ class CensorServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'censor');
 
         //注册验证规则
-        \Illuminate\Support\Facades\Validator::extend('text_censor', "\Larva\Censor\CensorValidator@validate");
+        Validator::extend('text_censor', "\Larva\Censor\CensorValidator@validate");
     }
 
     /**
