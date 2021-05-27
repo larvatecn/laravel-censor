@@ -66,25 +66,28 @@ trait HasContentCensor
     public function contentCensor()
     {
         //检查标记的字段
+        $stopWords = [];
+        $censor = Censor::make();
         foreach ($this->censorColumns as $field) {
-            $stopWords = [];
-            $censor = Censor::make();
             try {
                 $this->attributes[$field] = $censor->textCensor($this->attributes[$field]);
                 if ($censor->isMod) {//如果标题命中了关键词就放入人工审核
                     $stopWords = array_unique($censor->wordMod);
                     $this->markPostponed();
+                    continue;
                 }
             } catch (CensorNotPassedException $e) {
                 $stopWords = array_unique($censor->wordBanned);
                 $this->markRejected();
+                continue;
             }
-
-            // 记录触发的审核词
-            if (($this->attributes[$this->statusColumn] != CensorStatus::APPROVED) && $stopWords) {
-                $this->stopWords->stop_word = implode(',', $stopWords);
-                $this->stopWords->saveQuietly();
-            }
+        }
+        // 记录触发的审核词
+        if (($this->attributes[$this->statusColumn] != CensorStatus::APPROVED) && $stopWords) {
+            $this->stopWords->stop_word = implode(',', $stopWords);
+            $this->stopWords->saveQuietly();
+        } else {
+            $this->markApproved();
         }
     }
 
