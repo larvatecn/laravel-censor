@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Event;
+use Larva\Censor\Jobs\CensorJob;
 use Larva\Censor\Models\ContentCensor;
 
 /**
@@ -51,7 +52,7 @@ trait HasContentCensor
     {
         static::saved(function ($model) {
             if ($model->isPending) {
-                $model->contentCensor();
+                CensorJob::dispatch($model);
             }
         });
         static::created(function($model){
