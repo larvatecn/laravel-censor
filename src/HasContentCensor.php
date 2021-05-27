@@ -54,6 +54,9 @@ trait HasContentCensor
                 $model->contentCensor();
             }
         });
+        static::created(function($model){
+            $model->stopWords()->create();
+        });
     }
 
     /**
