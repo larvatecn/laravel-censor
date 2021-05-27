@@ -43,6 +43,20 @@ trait HasContentCensor
     protected $statusColumn = 'status';
 
     /**
+     * Boot the trait.
+     *
+     * Listen for the deleting event of a model, then remove the relation between it and tags
+     */
+    protected static function bootHasContentCensor(): void
+    {
+        static::saved(function ($model) {
+            if ($model->isPending) {
+                $model->contentCensor();
+            }
+        });
+    }
+
+    /**
      * 内容审查
      */
     public function contentCensor()
