@@ -18,10 +18,10 @@ use Larva\Censor\Models\ContentCensor;
  * 内容审查
  * @property boolean $status 状态：0 待审核 1 审核通过 2 拒绝 3 人工复审
  * @property ContentCensor $stopWords 触发的审核词
- * @property-read boolean $isApproved
- * @property-read boolean $isPending
- * @property-read boolean $isPostponed
- * @property-read boolean $isRejected
+ * @property-read boolean $isApproved 已审核
+ * @property-read boolean $isPending 待审核
+ * @property-read boolean $isPostponed 待人工审核
+ * @property-read boolean $isRejected 已拒绝
  *
  * @method static Builder approve() 审核通过的
  * @method static Builder pending() 待审核的
@@ -29,6 +29,7 @@ use Larva\Censor\Models\ContentCensor;
  * @method static Builder rejected() 审核拒绝的
  *
  * @mixin  Model
+ * @see Model
  * @author Tongle Xu <xutongle@gmail.com>
  */
 trait HasContentCensor
@@ -37,11 +38,6 @@ trait HasContentCensor
      * @var string 内容审查的列
      */
     protected $censorColumns = [];
-
-    /**
-     * @var string 状态字段
-     */
-    protected $statusColumn = 'status';
 
     /**
      * Boot the trait.
@@ -55,7 +51,7 @@ trait HasContentCensor
                 CensorJob::dispatch($model);
             }
         });
-        static::created(function($model){
+        static::created(function ($model) {
             $model->stopWords()->create();
         });
     }
@@ -82,8 +78,8 @@ trait HasContentCensor
                 continue;
             }
         }
-        // 记录触发的审核词
-        if (($this->attributes[$this->statusColumn] != CensorStatus::APPROVED) && $stopWords) {
+        // 记录命中的词
+        if ($stopWords) {
             $this->stopWords->stop_word = implode(',', $stopWords);
             $this->stopWords->saveQuietly();
         } else {
@@ -108,17 +104,7 @@ trait HasContentCensor
      */
     public function scopePending(Builder $query): Builder
     {
-        return $query->whereIn($this->statusColumn, [CensorStatus::PENDING, CensorStatus::POSTPONED]);
-    }
-
-    /**
-     * 查询被推迟的
-     * @param Builder $query
-     * @return Builder
-     */
-    public function scopePostponed(Builder $query): Builder
-    {
-        return $query->whereIn($this->statusColumn, [CensorStatus::PENDING, CensorStatus::POSTPONED]);
+        return $query->whereIn('status', [CensorStatus::PENDING, CensorStatus::POSTPONED]);
     }
 
     /**
@@ -128,7 +114,7 @@ trait HasContentCensor
      */
     public function scopeApprove(Builder $query): Builder
     {
-        return $query->where($this->statusColumn, CensorStatus::APPROVED);
+        return $query->where('status', CensorStatus::APPROVED);
     }
 
     /**
@@ -138,7 +124,7 @@ trait HasContentCensor
      */
     public function scopeRejected(Builder $query): Builder
     {
-        return $query->where($this->statusColumn, CensorStatus::REJECTED);
+        return $query->where('status', CensorStatus::REJECTED);
     }
 
     /**
@@ -147,7 +133,7 @@ trait HasContentCensor
      */
     public function getIsApprovedAttribute(): bool
     {
-        return $this->attributes[$this->statusColumn] == CensorStatus::APPROVED;
+        return $this->attributes['status'] == CensorStatus::APPROVED;
     }
 
     /**
@@ -156,7 +142,7 @@ trait HasContentCensor
      */
     public function getIsPendingAttribute(): bool
     {
-        return $this->attributes[$this->statusColumn] == CensorStatus::PENDING;
+        return $this->attributes['status'] == CensorStatus::PENDING;
     }
 
     /**
@@ -165,7 +151,7 @@ trait HasContentCensor
      */
     public function getIsPostponedAttribute(): bool
     {
-        return $this->attributes[$this->statusColumn] == CensorStatus::POSTPONED;
+        return $this->attributes['status'] == CensorStatus::POSTPONED;
     }
 
     /**
@@ -174,7 +160,17 @@ trait HasContentCensor
      */
     public function getIsRejectedAttribute(): bool
     {
-        return $this->attributes[$this->statusColumn] == CensorStatus::REJECTED;
+        return $this->attributes['status'] == CensorStatus::REJECTED;
+    }
+
+    /**
+     * 获取审核状态文本标识
+     * @return string
+     */
+    public function getStatusTextAttribute(): string
+    {
+        $status = static::getStatusLabels();
+        return $status[$this->status] ?? '';
     }
 
     /**
@@ -183,7 +179,8 @@ trait HasContentCensor
      */
     public function markApproved(): bool
     {
-        $this->attributes[$this->statusColumn] = CensorStatus::APPROVED;
+        $this->attributes['status'] = CensorStatus::APPROVED;
+        $this->attributes['publish_date'] = $this->freshTimestamp();
         $status = $this->saveQuietly();
         Event::dispatch(new Events\CensorApproved($this));
         return $status;
@@ -195,7 +192,7 @@ trait HasContentCensor
      */
     public function markPostponed(): bool
     {
-        $this->attributes[$this->statusColumn] = CensorStatus::POSTPONED;
+        $this->attributes['status'] = CensorStatus::POSTPONED;
         $status = $this->saveQuietly();
         Event::dispatch(new Events\CensorPostponed($this));
         return $status;
@@ -207,7 +204,7 @@ trait HasContentCensor
      */
     public function markPending(): bool
     {
-        $this->attributes[$this->statusColumn] = CensorStatus::PENDING;
+        $this->attributes['status'] = CensorStatus::PENDING;
         $status = $this->saveQuietly();
         Event::dispatch(new Events\CensorPending($this));
         return $status;
@@ -219,7 +216,7 @@ trait HasContentCensor
      */
     public function markRejected(): bool
     {
-        $this->attributes[$this->statusColumn] = CensorStatus::REJECTED;
+        $this->attributes['status'] = CensorStatus::REJECTED;
         $status = $this->saveQuietly();
         Event::dispatch(new Events\CensorRejected($this));
         return $status;
@@ -232,6 +229,7 @@ trait HasContentCensor
     public static function getStatusLabels(): array
     {
         return [
+            CensorStatus::POSTPONED => '待复审',
             CensorStatus::PENDING => '待审核',
             CensorStatus::APPROVED => '已审核',
             CensorStatus::REJECTED => '拒绝',
@@ -245,6 +243,7 @@ trait HasContentCensor
     public static function getStatusDots(): array
     {
         return [
+            CensorStatus::POSTPONED => 'warning',
             CensorStatus::PENDING => 'info',
             CensorStatus::APPROVED => 'success',
             CensorStatus::REJECTED => 'error',

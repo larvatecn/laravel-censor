@@ -98,6 +98,7 @@ class Censor
      * 本地文本检查
      * @param string $content
      * @return string
+     * @throw CensorNotPassedException
      */
     public function localStopWordsCheck(string $content): string
     {

@@ -8,7 +8,7 @@
 namespace Larva\Censor;
 
 /**
- * 审核状态
+ * 内容审查状态
  * @author Tongle Xu <xutongle@gmail.com>
  */
 class CensorStatus
