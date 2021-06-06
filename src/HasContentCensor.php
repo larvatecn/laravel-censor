@@ -23,7 +23,7 @@ use Larva\Censor\Models\ContentCensor;
  * @property-read boolean $isPostponed 待人工审核
  * @property-read boolean $isRejected 已拒绝
  *
- * @method static Builder approve() 审核通过的
+ * @method static Builder approved() 审核通过的
  * @method static Builder pending() 待审核的
  * @method static Builder postponed() 需要人工复审的
  * @method static Builder rejected() 审核拒绝的
@@ -112,7 +112,7 @@ trait HasContentCensor
      * @param Builder $query
      * @return Builder
      */
-    public function scopeApprove(Builder $query): Builder
+    public function scopeApproved(Builder $query): Builder
     {
         return $query->where('status', CensorStatus::APPROVED);
     }
