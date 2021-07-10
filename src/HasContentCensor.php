@@ -62,8 +62,7 @@ trait HasContentCensor
      */
     public function contentCensor()
     {
-        /* @var Model|static $model */
-        if (empty($model->censorColumns ?? [])) {
+        if (empty($this->censorColumns ?? [])) {
             return;
         }
         //检查标记的字段
