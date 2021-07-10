@@ -82,6 +82,7 @@ class Censor
     }
 
     /**
+     * 图片内容审查
      * @param string $path
      * @param false $isRemote
      */

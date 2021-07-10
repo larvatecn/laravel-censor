@@ -180,7 +180,6 @@ trait HasContentCensor
     public function markApproved(): bool
     {
         $this->attributes['status'] = CensorStatus::APPROVED;
-        $this->attributes['publish_date'] = $this->freshTimestamp();
         $status = $this->saveQuietly();
         Event::dispatch(new Events\CensorApproved($this));
         return $status;
