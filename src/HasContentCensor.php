@@ -16,12 +16,12 @@ use Larva\Censor\Models\ContentCensor;
 
 /**
  * 内容审查
- * @property boolean $status 状态：0 待审核 1 审核通过 2 拒绝 3 人工复审
+ * @property bool $status 状态：0 待审核 1 审核通过 2 拒绝 3 人工复审
  * @property ContentCensor $stopWords 触发的审核词
- * @property-read boolean $isApproved 已审核
- * @property-read boolean $isPending 待审核
- * @property-read boolean $isPostponed 待人工审核
- * @property-read boolean $isRejected 已拒绝
+ * @property-read bool $isApproved 已审核
+ * @property-read bool $isPending 待审核
+ * @property-read bool $isPostponed 待人工审核
+ * @property-read bool $isRejected 已拒绝
  *
  * @method static Builder approved() 审核通过的
  * @method static Builder pending() 待审核的
@@ -35,7 +35,7 @@ use Larva\Censor\Models\ContentCensor;
 trait HasContentCensor
 {
     /**
-     * @var string 内容审查的列
+     * @var array 内容审查的列
      */
     protected $censorColumns = [];
 
