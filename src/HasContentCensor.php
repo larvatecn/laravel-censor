@@ -16,6 +16,7 @@ use Larva\Censor\Models\ContentCensor;
 
 /**
  * 内容审查
+ * @property array $censorColumns
  * @property bool $status 状态：0 待审核 1 审核通过 2 拒绝 3 人工复审
  * @property ContentCensor $stopWords 触发的审核词
  * @property-read bool $isApproved 已审核
@@ -37,7 +38,7 @@ trait HasContentCensor
     /**
      * @var array 内容审查的列
      */
-    protected $censorColumns = [];
+    //protected $censorColumns = null;
 
     /**
      * Boot the trait.
@@ -61,6 +62,10 @@ trait HasContentCensor
      */
     public function contentCensor()
     {
+        /* @var Model|static $model */
+        if (empty($model->censorColumns ?? [])) {
+            return;
+        }
         //检查标记的字段
         $stopWords = [];
         $censor = Censor::make();
