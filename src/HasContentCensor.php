@@ -47,13 +47,11 @@ trait HasContentCensor
      */
     protected static function bootHasContentCensor(): void
     {
-        static::saved(function ($model) {
-            if ($model->isPending) {
-                CensorJob::dispatch($model);
-            }
-        });
         static::created(function ($model) {
             $model->stopWords()->create();
+        });
+        static::saved(function ($model) {
+            $model->markPending();
         });
     }
 
@@ -209,6 +207,7 @@ trait HasContentCensor
     {
         $this->attributes['status'] = CensorStatus::PENDING;
         $status = $this->saveQuietly();
+        CensorJob::dispatch($this);//委派审核队列
         Event::dispatch(new Events\CensorPending($this));
         return $status;
     }
