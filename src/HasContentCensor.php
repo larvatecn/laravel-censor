@@ -36,11 +36,6 @@ use Larva\Censor\Models\ContentCensor;
 trait HasContentCensor
 {
     /**
-     * @var array 内容审查的列
-     */
-    //protected $censorColumns = null;
-
-    /**
      * Boot the trait.
      *
      * Listen for the deleting event of a model, then remove the relation between it and tags
@@ -225,10 +220,10 @@ trait HasContentCensor
     }
 
     /**
-     * 获取状态Label
+     * 获取状态 Label
      * @return string[]
      */
-    public static function getStatusLabels(): array
+    public static function getStatusMaps(): array
     {
         return [
             CensorStatus::POSTPONED => '待复审',
