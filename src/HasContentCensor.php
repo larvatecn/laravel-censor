@@ -166,7 +166,7 @@ trait HasContentCensor
      */
     public function getStatusTextAttribute(): string
     {
-        $status = static::getStatusLabels();
+        $status = static::getStatusMaps();
         return $status[$this->status] ?? '';
     }
 

@@ -50,7 +50,7 @@ class Censor
      * 获取自身实例
      * @return Censor
      */
-    public static function make()
+    public static function make(): Censor
     {
         return new Censor();
     }
