@@ -98,10 +98,11 @@ class Censor
     /**
      * 本地文本检查
      * @param string $content
+     * @param bool $throw
      * @return string
-     * @throw CensorNotPassedException
+     * @throws CensorNotPassedException
      */
-    public function localStopWordsCheck(string $content): string
+    public function localStopWordsCheck(string $content, bool $throw = true): string
     {
         // 处理指定类型非忽略的敏感词
         StopWord::query()->where('ugc', '<>', StopWord::IGNORE)
@@ -124,13 +125,15 @@ class Censor
                         if (preg_match($find, $content, $matches)) {
                             // 记录触发的禁用词
                             array_push($this->wordBanned, $word->find);
-                            throw new CensorNotPassedException(trans('censor.content_banned'));
                         }
                     }
                 }
             })->each(function ($word) {
                 // tapEach 尚未真正开始处理，在此处触发 tapEach
             });
+        if ($throw && $this->wordBanned) {
+            throw new CensorNotPassedException(trans('censor.content_banned'));
+        }
         return $content;
     }
 
