@@ -2,7 +2,6 @@
 /**
  * This is NOT a freeware, use is subject to license terms
  * @copyright Copyright (c) 2010-2099 Jinan Larva Information Technology Co., Ltd.
- * @link http://www.larva.com.cn/
  */
 
 namespace Larva\Censor;
@@ -42,10 +41,10 @@ trait HasContentCensor
      */
     protected static function bootHasContentCensor(): void
     {
-        static::created(function ($model) {
+        self::created(function ($model) {
             $model->stopWords()->create();
         });
-        static::saved(function ($model) {
+        self::saved(function ($model) {
             $model->markPending();
         });
     }
@@ -101,7 +100,7 @@ trait HasContentCensor
      */
     public function scopePending(Builder $query): Builder
     {
-        return $query->whereIn('status', [CensorStatus::PENDING, CensorStatus::POSTPONED]);
+        return $query->whereIn('status', [Status::PENDING, Status::POSTPONED]);
     }
 
     /**
@@ -111,7 +110,7 @@ trait HasContentCensor
      */
     public function scopeApproved(Builder $query): Builder
     {
-        return $query->where('status', CensorStatus::APPROVED);
+        return $query->where('status', Status::APPROVED);
     }
 
     /**
@@ -121,7 +120,7 @@ trait HasContentCensor
      */
     public function scopeRejected(Builder $query): Builder
     {
-        return $query->where('status', CensorStatus::REJECTED);
+        return $query->where('status', Status::REJECTED);
     }
 
     /**
@@ -130,7 +129,7 @@ trait HasContentCensor
      */
     public function getIsApprovedAttribute(): bool
     {
-        return $this->attributes['status'] == CensorStatus::APPROVED;
+        return $this->attributes['status'] == Status::APPROVED;
     }
 
     /**
@@ -139,7 +138,7 @@ trait HasContentCensor
      */
     public function getIsPendingAttribute(): bool
     {
-        return $this->attributes['status'] == CensorStatus::PENDING;
+        return $this->attributes['status'] == Status::PENDING;
     }
 
     /**
@@ -148,7 +147,7 @@ trait HasContentCensor
      */
     public function getIsPostponedAttribute(): bool
     {
-        return $this->attributes['status'] == CensorStatus::POSTPONED;
+        return $this->attributes['status'] == Status::POSTPONED;
     }
 
     /**
@@ -157,7 +156,7 @@ trait HasContentCensor
      */
     public function getIsRejectedAttribute(): bool
     {
-        return $this->attributes['status'] == CensorStatus::REJECTED;
+        return $this->attributes['status'] == Status::REJECTED;
     }
 
     /**
@@ -166,8 +165,7 @@ trait HasContentCensor
      */
     public function getStatusTextAttribute(): string
     {
-        $status = static::getStatusMaps();
-        return $status[$this->status] ?? '';
+        return Status::MAPS[$this->status] ?? '';
     }
 
     /**
@@ -176,7 +174,7 @@ trait HasContentCensor
      */
     public function markApproved(): bool
     {
-        $this->attributes['status'] = CensorStatus::APPROVED;
+        $this->attributes['status'] = Status::APPROVED;
         $status = $this->saveQuietly();
         Event::dispatch(new Events\CensorApproved($this));
         return $status;
@@ -188,7 +186,7 @@ trait HasContentCensor
      */
     public function markPostponed(): bool
     {
-        $this->attributes['status'] = CensorStatus::POSTPONED;
+        $this->attributes['status'] = Status::POSTPONED;
         $status = $this->saveQuietly();
         Event::dispatch(new Events\CensorPostponed($this));
         return $status;
@@ -200,7 +198,7 @@ trait HasContentCensor
      */
     public function markPending(): bool
     {
-        $this->attributes['status'] = CensorStatus::PENDING;
+        $this->attributes['status'] = Status::PENDING;
         $status = $this->saveQuietly();
         CensorJob::dispatch($this);//委派审核队列
         Event::dispatch(new Events\CensorPending($this));
@@ -213,24 +211,10 @@ trait HasContentCensor
      */
     public function markRejected(): bool
     {
-        $this->attributes['status'] = CensorStatus::REJECTED;
+        $this->attributes['status'] = Status::REJECTED;
         $status = $this->saveQuietly();
         Event::dispatch(new Events\CensorRejected($this));
         return $status;
-    }
-
-    /**
-     * 获取状态 Label
-     * @return string[]
-     */
-    public static function getStatusMaps(): array
-    {
-        return [
-            CensorStatus::POSTPONED => '待复审',
-            CensorStatus::PENDING => '待审核',
-            CensorStatus::APPROVED => '已审核',
-            CensorStatus::REJECTED => '拒绝',
-        ];
     }
 
     /**
@@ -240,10 +224,10 @@ trait HasContentCensor
     public static function getStatusDots(): array
     {
         return [
-            CensorStatus::POSTPONED => 'warning',
-            CensorStatus::PENDING => 'info',
-            CensorStatus::APPROVED => 'success',
-            CensorStatus::REJECTED => 'error',
+            Status::POSTPONED => 'warning',
+            Status::PENDING => 'info',
+            Status::APPROVED => 'success',
+            Status::REJECTED => 'error',
         ];
     }
 }

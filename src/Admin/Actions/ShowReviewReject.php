@@ -20,7 +20,7 @@ class ShowReviewReject extends AbstractTool
     /**
      * @var string|null
      */
-    protected $model;
+    protected ?string $model;
 
     /**
      * Restore constructor.
@@ -47,7 +47,7 @@ class ShowReviewReject extends AbstractTool
         return ['确定拒绝通过吗？'];
     }
 
-    public function parameters()
+    public function parameters(): array
     {
         return [
             'model' => $this->model,
@@ -57,7 +57,7 @@ class ShowReviewReject extends AbstractTool
     /**
      * @return string
      */
-    protected function html()
+    protected function html(): string
     {
         $this->defaultHtmlAttribute('href', 'javascript:void(0)');
 

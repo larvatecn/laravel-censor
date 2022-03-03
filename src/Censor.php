@@ -23,28 +23,28 @@ class Censor
      *
      * @var bool
      */
-    public $isMod = false;
+    public bool $isMod = false;
 
     /**
      * 触发的替换词
      *
      * @var array
      */
-    public $wordReplace = [];
+    public array $wordReplace = [];
 
     /**
      * 触发的审核词
      *
      * @var array
      */
-    public $wordMod = [];
+    public array $wordMod = [];
 
     /**
      * 触发的禁用词
      *
      * @var array
      */
-    public $wordBanned = [];
+    public array $wordBanned = [];
 
     /**
      * 获取自身实例

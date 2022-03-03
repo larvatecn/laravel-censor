@@ -18,7 +18,7 @@ class GridBatchAccept extends BatchAction
 {
     protected $title = '<i class="feather icon-check"></i> '.'审核通过';
 
-    protected $model;
+    protected ?string $model;
 
     /**
      * BatchRestore constructor.
@@ -44,7 +44,7 @@ class GridBatchAccept extends BatchAction
         return ['确定吗？'];
     }
 
-    public function parameters()
+    public function parameters(): array
     {
         return [
             'model' => $this->model,

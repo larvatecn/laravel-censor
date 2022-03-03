@@ -26,10 +26,10 @@ class CensorServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
             $this->publishes([
-                __DIR__ . '/../resources/lang' => resource_path('lang'),
+                __DIR__ . '/../lang' => lang_path(),
             ], 'censor-lang');
         }
-        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'censor');
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'censor');
 
         //注册验证规则
         Validator::extend('text_censor', "\Larva\Censor\CensorValidator@validate");

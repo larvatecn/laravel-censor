@@ -18,7 +18,7 @@ class GridBatchReject extends BatchAction
 {
     protected $title = '<i class="feather icon-slash"></i> '.'拒绝通过';
 
-    protected $model;
+    protected ?string $model;
 
     /**
      * BatchRestore constructor.
@@ -39,12 +39,12 @@ class GridBatchReject extends BatchAction
         return $this->response()->success('已拒绝')->refresh();
     }
 
-    public function confirm()
+    public function confirm(): array
     {
         return ['确定吗？'];
     }
 
-    public function parameters()
+    public function parameters(): array
     {
         return [
             'model' => $this->model,

@@ -24,7 +24,7 @@ class GridReviewReject extends RowAction
     /**
      * @var string|null
      */
-    protected $model;
+    protected ?string $model;
 
     /**
      * Restore constructor.
@@ -46,12 +46,12 @@ class GridReviewReject extends RowAction
         return $this->response()->success('已拒绝通过')->refresh();
     }
 
-    public function confirm()
+    public function confirm(): array
     {
         return ['确定拒绝通过吗？'];
     }
 
-    public function parameters()
+    public function parameters(): array
     {
         return [
             'model' => $this->model,
