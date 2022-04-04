@@ -29,7 +29,7 @@ class Status
     /**
      * 获取状态Dot
      */
-    public const Dots = [
+    public const DOTS = [
         Status::POSTPONED => 'warning',
         Status::PENDING => 'info',
         Status::APPROVED => 'success',
