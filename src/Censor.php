@@ -1,8 +1,8 @@
 <?php
 /**
- * This is NOT a freeware, use is subject to license terms
+ * This is NOT a freeware, use is subject to license terms.
+ *
  * @copyright Copyright (c) 2010-2099 Jinan Larva Information Technology Co., Ltd.
- * @link http://www.larva.com.cn/
  */
 
 namespace Larva\Censor;
@@ -72,7 +72,7 @@ class Censor
         //云验证
         if (settings('system.cloud_censor') == 'tencent') {
             $content = $this->tencentCloudTextCensor($content);
-        } else if (settings('system.cloud_censor') == 'baidu') {
+        } elseif (settings('system.cloud_censor') == 'baidu') {
             $content = $this->baiduCloudTextCensor($content);
         }
 
@@ -90,7 +90,7 @@ class Censor
     {
         if (settings('system.tencent_censor', true) && class_exists('\Larva\TencentCloud\TencentCloud')) {
             $this->tencentCloudImageCensor($path, $isRemote);
-        } else if (settings('system.baidu_censor', true) && class_exists('\Larva\Baidu\Cloud\BaiduCloud')) {
+        } elseif (settings('system.baidu_censor', true) && class_exists('\Larva\Baidu\Cloud\BaiduCloud')) {
             $this->baiduCloudImageCensor($path, $isRemote);
         }
     }
