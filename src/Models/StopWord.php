@@ -55,11 +55,14 @@ class StopWord extends Model
      */
     public const REPLACE = '{REPLACE}';
 
+    /**
+     * 支持的操作
+     */
     public const ACTIONS = [
-        static::IGNORE => '忽略不处理',
-        static::MOD => '审核',
-        static::BANNED => '禁用',
-        static::REPLACE => '替换'
+        self::IGNORE => '忽略不处理',
+        self::MOD => '审核',
+        self::BANNED => '禁用',
+        self::REPLACE => '替换'
     ];
 
     /**

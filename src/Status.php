@@ -30,9 +30,9 @@ class Status
      * 获取状态Dot
      */
     public const DOTS = [
-        Status::POSTPONED => 'warning',
-        Status::PENDING => 'info',
-        Status::APPROVED => 'success',
-        Status::REJECTED => 'error',
+        self::POSTPONED => 'warning',
+        self::PENDING => 'info',
+        self::APPROVED => 'success',
+        self::REJECTED => 'error',
     ];
 }
