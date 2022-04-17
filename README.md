@@ -8,10 +8,6 @@
     <a href="https://packagist.org/packages/larva/laravel-censor"><img src="https://poser.pugx.org/larva/laravel-censor/license" alt="License"></a>
 </p>
 
-[![License](https://poser.pugx.org/larva/laravel-censor/license.svg)](https://packagist.org/packages/larva/laravel-censor)
-[![Latest Stable Version](https://poser.pugx.org/larva/laravel-censor/v/stable.png)](https://packagist.org/packages/larva/laravel-censor)
-[![Total Downloads](https://poser.pugx.org/larva/laravel-censor/downloads.png)](https://packagist.org/packages/larva/laravel-censor)
-
 ## 环境需求
 
 - PHP >= 7.4
