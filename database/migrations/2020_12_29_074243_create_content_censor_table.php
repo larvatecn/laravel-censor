@@ -18,6 +18,8 @@ class CreateContentCensorTable extends Migration
             $table->morphs('source');//内容关联
             $table->string('stop_word')->nullable();
             $table->timestamps();
+
+            $table->comment('内容审查表');
         });
     }
 
