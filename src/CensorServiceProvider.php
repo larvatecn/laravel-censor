@@ -52,7 +52,7 @@ class CensorServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(Censor::class, function ($app) {
+        $this->app->bind(Censor::class, function ($app) {
             return new Censor();
         });
     }
