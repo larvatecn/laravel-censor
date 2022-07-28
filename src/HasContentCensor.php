@@ -1,6 +1,7 @@
 <?php
 /**
- * This is NOT a freeware, use is subject to license terms
+ * This is NOT a freeware, use is subject to license terms.
+ *
  * @copyright Copyright (c) 2010-2099 Jinan Larva Information Technology Co., Ltd.
  */
 
@@ -215,19 +216,5 @@ trait HasContentCensor
         $status = $this->saveQuietly();
         Event::dispatch(new Events\CensorRejected($this));
         return $status;
-    }
-
-    /**
-     * 获取状态Dot
-     * @return string[]
-     */
-    public static function getStatusDots(): array
-    {
-        return [
-            Status::POSTPONED => 'warning',
-            Status::PENDING => 'info',
-            Status::APPROVED => 'success',
-            Status::REJECTED => 'error',
-        ];
     }
 }

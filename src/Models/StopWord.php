@@ -1,8 +1,8 @@
 <?php
 /**
- * This is NOT a freeware, use is subject to license terms
+ * This is NOT a freeware, use is subject to license terms.
+ *
  * @copyright Copyright (c) 2010-2099 Jinan Larva Information Technology Co., Ltd.
- * @link http://www.larva.com.cn/
  */
 
 namespace Larva\Censor\Models;
@@ -38,22 +38,32 @@ class StopWord extends Model
     /**
      * 忽略、不处理
      */
-    const IGNORE = '{IGNORE}';
+    public const IGNORE = '{IGNORE}';
 
     /**
      * 审核
      */
-    const MOD = '{MOD}';
+    public const MOD = '{MOD}';
 
     /**
      * 禁用
      */
-    const BANNED = '{BANNED}';
+    public const BANNED = '{BANNED}';
 
     /**
      * 替换
      */
-    const REPLACE = '{REPLACE}';
+    public const REPLACE = '{REPLACE}';
+
+    /**
+     * 支持的操作
+     */
+    public const ACTIONS = [
+        self::IGNORE => '忽略不处理',
+        self::MOD => '审核',
+        self::BANNED => '禁用',
+        self::REPLACE => '替换'
+    ];
 
     /**
      * 为数组 / JSON 序列化准备日期。
@@ -67,20 +77,6 @@ class StopWord extends Model
     }
 
     /**
-     * UGC 处理方式
-     * @return string[]
-     */
-    public static function getUGCActions(): array
-    {
-        return [
-            static::IGNORE => '忽略不处理',
-            static::MOD => '审核',
-            static::BANNED => '禁用',
-            static::REPLACE => '替换'
-        ];
-    }
-
-    /**
      * Create a new stop word.
      *
      * @param string $ugc 用户内容处理方式
@@ -90,7 +86,7 @@ class StopWord extends Model
      */
     public static function build(string $ugc, string $find, string $replacement): StopWord
     {
-        $stopWord = new static;
+        $stopWord = new static();
         $stopWord->ugc = $ugc;
         $stopWord->find = $find;
         $stopWord->replacement = $replacement;

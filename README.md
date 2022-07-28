@@ -2,13 +2,15 @@
 
 适用于 Laravel 的内容安全审查扩展。
 
-[![License](https://poser.pugx.org/larva/laravel-censor/license.svg)](https://packagist.org/packages/larva/laravel-censor)
-[![Latest Stable Version](https://poser.pugx.org/larva/laravel-censor/v/stable.png)](https://packagist.org/packages/larva/laravel-censor)
-[![Total Downloads](https://poser.pugx.org/larva/laravel-censor/downloads.png)](https://packagist.org/packages/larva/laravel-censor)
+<p align="center">
+    <a href="https://packagist.org/packages/larva/laravel-censor"><img src="https://poser.pugx.org/larva/laravel-censor/v/stable" alt="Stable Version"></a>
+    <a href="https://packagist.org/packages/larva/laravel-censor"><img src="https://poser.pugx.org/larva/laravel-censor/downloads" alt="Total Downloads"></a>
+    <a href="https://packagist.org/packages/larva/laravel-censor"><img src="https://poser.pugx.org/larva/laravel-censor/license" alt="License"></a>
+</p>
 
 ## 环境需求
 
-- PHP >= 7.3
+- PHP >= 7.4
 
 ## 安装
 

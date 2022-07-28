@@ -1,4 +1,9 @@
 <?php
+/**
+ * This is NOT a freeware, use is subject to license terms.
+ *
+ * @copyright Copyright (c) 2010-2099 Jinan Larva Information Technology Co., Ltd.
+ */
 
 declare(strict_types=1);
 /**
@@ -9,15 +14,25 @@ namespace Larva\Censor;
 
 class Status
 {
-    const PENDING = 0;
-    const APPROVED = 1;
-    const REJECTED = 2;
-    const POSTPONED = 3;//推迟，需要二次确认
+    public const PENDING = 0;
+    public const APPROVED = 1;
+    public const REJECTED = 2;
+    public const POSTPONED = 3;//推迟，需要二次确认
 
-    const MAPS = [
+    public const MAPS = [
         self::POSTPONED => '待复审',
         self::PENDING => '待审核',
         self::APPROVED => '已审核',
         self::REJECTED => '拒绝',
+    ];
+
+    /**
+     * 获取状态Dot
+     */
+    public const DOTS = [
+        self::POSTPONED => 'warning',
+        self::PENDING => 'info',
+        self::APPROVED => 'success',
+        self::REJECTED => 'error',
     ];
 }

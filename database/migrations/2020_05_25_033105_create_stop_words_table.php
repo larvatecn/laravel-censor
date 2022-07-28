@@ -25,6 +25,8 @@ class CreateStopWordsTable extends Migration
             $table->string('find')->comment('敏感词');
             $table->string('replacement')->nullable()->default('')->comment('替换词');
             $table->timestamps();
+
+            $table->comment('敏感词表');
         });
     }
 
